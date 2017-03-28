@@ -21,6 +21,7 @@ int main()
 	int isolatedNodesArray[MAX_ROWS] = { 0 };
 	int numIsolatedNodes = 0;
 	int i, j;
+	int nodeValue, nextNode = 0;
 	
 	// get the number of nodes from the user
 	cout << endl;
@@ -54,6 +55,7 @@ int main()
         }
 		cout << endl;
     }
+	cout << endl;
 
 
 	// determine the isolated nodes, 
@@ -79,27 +81,31 @@ int main()
 	} else {
 		cout << "node " << isolatedNodesArray[0] << " is isolated" << endl;
 	}
+	cout << endl;
 
 	// build an adjacency matrix based on the array-pointer representation
 	for (i = 0; i < numNodes; ++i) {
 
+		nodeValue = A[A[i][1] - 1][0];			// prep the initial node value
+		nextNode = A[A[i][1] - 1][1];				// minus one, because mathematicians.
+
 		// prime the list traverse w/ the first values in the list
-		int nodeValue = A[ A[i][1] - 1 ][0];			// prep the initial node value
-		int	nextNode = A[ A[i][1] - 1 ][1];				// minus one, because mathematicians.
 		cout << "nodeValue: " << nodeValue << endl;
 		cout << "nextNode: " << nextNode << endl;
 
-
-		// if we're not at the end of the list, there's an adjacency
-		while (nextNode != -1) {
+		do {
 
 			AM[i][nodeValue] = 1;	// update the adjacency matrix
-			
-			// move to next node in list
-			nextNode = A[nextNode][1] - 1;
-			nodeValue = A[nextNode][0];
 
-		}
+			// move to next node in list, if were not at the final node
+			if (nextNode != -1) {
+				nextNode = A[nextNode][1] - 1;
+				nodeValue = A[nextNode][0];
+			}
+
+		} while (nextNode != -1);
+
+
 	}
 
 	// print out the adjacency matrix
