@@ -61,6 +61,7 @@ int main()
 	// determine the isolated nodes, 
 	// those will be in the initial portion of the array, within numNodes,  w/ a -1.
 	//cout << endl << "--------------" << endl;
+	/*
 	for (i = 0; i < numNodes; ++i) {
 		// if this node is -1, it's isolated.
 		//cout << "A[i][1]: " << A[i][1] << endl;
@@ -69,6 +70,45 @@ int main()
 			isolatedNodesArray[numIsolatedNodes] = A[i][0];
 			++numIsolatedNodes;
 		}
+	}
+	*/
+
+
+	// build an adjacency matrix based on the array-pointer representation
+	for (i = 0; i < numNodes; ++i) {
+		
+		// first check if the initial node has a value of -1, if so it's an isolated node, 
+		// and there's no need to continue. 
+		if (A[i][1] == -1) {
+			// put it in the isolatedNodeArray
+			isolatedNodesArray[numIsolatedNodes] = A[i][0];
+			++numIsolatedNodes;
+		}
+		// otherwise follow the node path
+		else {
+
+
+			nodeValue = A[A[i][1] - 1][0];			// prep the initial node value
+			nextNode = A[A[i][1] - 1][1];				// minus one, because mathematicians.
+
+			// prime the list traverse w/ the first values in the list
+			cout << "nodeValue: " << nodeValue << endl;
+			cout << "nextNode: " << nextNode << endl;
+
+			do {
+
+				AM[i][nodeValue - 1] = 1;	// update the adjacency matrix, -1 to convert to proper array index
+
+				// move to next node in list, if were not at the final node
+				if (nextNode != -1) {
+					nextNode = A[nextNode][1] - 1;
+					nodeValue = A[nextNode][0];
+				}
+
+			} while (nextNode != -1);
+
+		}
+
 	}
 
 	// check if there's more than one node, the language pluralizes
@@ -82,31 +122,6 @@ int main()
 		cout << "node " << isolatedNodesArray[0] << " is isolated" << endl;
 	}
 	cout << endl;
-
-	// build an adjacency matrix based on the array-pointer representation
-	for (i = 0; i < numNodes; ++i) {
-
-		nodeValue = A[A[i][1] - 1][0];			// prep the initial node value
-		nextNode = A[A[i][1] - 1][1];				// minus one, because mathematicians.
-
-		// prime the list traverse w/ the first values in the list
-		cout << "nodeValue: " << nodeValue << endl;
-		cout << "nextNode: " << nextNode << endl;
-
-		do {
-
-			AM[i][nodeValue] = 1;	// update the adjacency matrix
-
-			// move to next node in list, if were not at the final node
-			if (nextNode != -1) {
-				nextNode = A[nextNode][1] - 1;
-				nodeValue = A[nextNode][0];
-			}
-
-		} while (nextNode != -1);
-
-
-	}
 
 	// print out the adjacency matrix
 	cout << endl << "--------------" << endl;
