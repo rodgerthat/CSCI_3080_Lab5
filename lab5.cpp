@@ -2,13 +2,13 @@
  * filename		: lab5.cpp
  * class		: CSCI_3080
  * instructor	: Dr. Pettey
- * description	: read in the array-pointer representation of a graph, tell which nodes are isolated, and print out the adjacency matrix.
+ * description	: read in the array-pointer representation of a graph, 
+ *				: tell which nodes are isolated, and print out the adjacency matrix.
 */
 
 #include <iostream>
 
 using namespace std;
-
 
 int main()
 {
@@ -21,130 +21,81 @@ int main()
 	int isolatedNodesArray[MAX_ROWS] = { 0 };
 	int numIsolatedNodes = 0;
 	int i, j;
-	int nodeVal, nextNode = 0;
-	
+
 	// get the number of nodes from the user
 	cout << endl;
-	cout << "Please enter the umber of nodes: ";
-		
+	cout << "Please input the number of nodes: ";
+
 	cin >> numNodes;
 
 	// get the number of rows from the user
-	cout << endl;
 	cout << "How many rows are in the array-pointer representation? ";
 
 	cin >> numRows;
 
-	// get the array-pointer representation from the user
-	cout << endl;
+	// get the array-pointer representation from the user, assign the values into the array
 	cout << "Please input the array-pointer representation of the graph: " << endl;
-    for (i = 0; i < numRows; ++i) {
+	for (i = 0; i < numRows; ++i) {
 		for (j = 0; j < MAX_COLS; ++j) {
-            cin >> A[i][j];
-        }
-    }
-
-	// print out array-pointer representation
-	cout << endl << "--------------" << endl;
-	//cout << "numNodes: " << numNodes << endl;
-	//cout << "numRows: " << numRows << endl;
-	cout << endl;
-    for (i = 0; i < numRows; ++i) {
-		for (j = 0; j < MAX_COLS; ++j) {
-            cout << A[i][j] << " ";
-        }
-		cout << endl;
-    }
-	cout << endl;
-
-
-	// determine the isolated nodes, 
-	// those will be in the initial portion of the array, within numNodes,  w/ a -1.
-	//cout << endl << "--------------" << endl;
-	/*
-	for (i = 0; i < numNodes; ++i) {
-		// if this node is -1, it's isolated.
-		//cout << "A[i][1]: " << A[i][1] << endl;
-		if (A[i][1] == -1) {
-			// put it in the isolatedNodeArray
-			isolatedNodesArray[numIsolatedNodes] = A[i][0];
-			++numIsolatedNodes;
+			cin >> A[i][j];
 		}
 	}
+
+	// print out array-pointer representation
+	// for debuggery
+	/*
+	cout << "numNodes: " << numNodes << endl;
+	cout << "numRows: " << numRows << endl;
+	cout << endl;
+	for (i = 0; i < numRows; ++i) {
+		for (j = 0; j < MAX_COLS; ++j) {
+			cout << A[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
 	*/
 
-	for (int i=0; i<numNodes; ++i) {
-
-			int nodeVal = A[i][0];
-			int nodeNext = A[i][1];
-
-			// if the first node contains a -1 for it's nodeNext value, it's isolated
-			if (nodeNext == -1) {
-				isolatedNodesArray[numIsolatedNodes] = A[i][0];
-				++numIsolatedNodes;
-			};
-
-			// if the node is not isolated, we need to follow it's adjacency path
-			if ( nodeNext != -1 ) {
-
-				do {
-
-					nodeVal = A[nodeNext-1][0];
-					nodeNext = A[nodeNext-1][1];
-
-					// assign a 1 to the proper column in the row of the adjacency matrix
-					// subtract one to counter for the mathematician entering the values
-					// so it's an array index
-					AM[i][nodeVal - 1] = 1;
-
-				} while ( nodeNext != -1 );
-
-			}
-
-		}
-
-	/*
 	// build an adjacency matrix based on the array-pointer representation
-	for (i = 0; i < numNodes; ++i) {
-		
-		// first check if the initial node has a value of -1, if so it's an isolated node, 
-		// and there's no need to continue. 
-		if (A[i][1] == -1) {
-			// put it in the isolatedNodeArray
+	// loop through the rows in the matrix and assign 1's to the corresponding adjacency columns for each row.
+	for (int i = 0; i < numNodes; ++i) {
+
+		int nodeVal = A[i][0];
+		int nodeNext = A[i][1];
+
+		// if the first node contains a -1 for it's nodeNext value, it's isolated
+		if (nodeNext == -1) {
 			isolatedNodesArray[numIsolatedNodes] = A[i][0];
 			++numIsolatedNodes;
-		}
-		// otherwise follow the node path
-		else {
+		};
 
-
-			nodeValue = A[A[i][1] - 1][0];			// prep the initial node value
-			nextNode = A[A[i][1] - 1][1];				// minus one, because mathematicians.
-
-			// prime the list traverse w/ the first values in the list
-			cout << "nodeValue: " << nodeValue << endl;
-			cout << "nextNode: " << nextNode << endl;
+		// if the node is not isolated, we need to follow it's adjacency pointer~path
+		if (nodeNext != -1) {
 
 			do {
 
-				AM[i][nodeValue - 1] = 1;	// update the adjacency matrix, -1 to convert to proper array index
+				// get the values from the next node in the tree, offset for numerical index
+				nodeVal = A[nodeNext - 1][0];
+				nodeNext = A[nodeNext - 1][1];
 
-				// move to next node in list, if were not at the final node
-				if (nextNode != -1) {
-					nextNode = A[nextNode][1] - 1;
-					nodeValue = A[nextNode][0];
-				}
+				// assign a 1 to the proper column in the row of the adjacency matrix
+				// subtract one to counter for the mathematician entering the values
+				// so it's an array index
+				AM[i][nodeVal - 1] = 1;
 
-			} while (nextNode != -1);
+			} while (nodeNext != -1);	// once we hit -1 we're at the end of the pointer~path
 
 		}
 
 	}
-	*/
 
+	// tell the benevolent mathamatician how many nodes are isolated
 	// check if there's more than one node, the language pluralizes
 	// is that a word? pluralizes? a language major, i am not.
-	if (numIsolatedNodes > 1) {
+	cout << endl;
+	if (numIsolatedNodes == 0) {
+		cout << "There are no isolated nodes.";
+	} else if (numIsolatedNodes > 1) {
 		cout << "nodes ";
 		for (i = 0; i < numIsolatedNodes - 1; ++i) {
 			cout << isolatedNodesArray[i] << " ";
@@ -156,7 +107,7 @@ int main()
 	cout << endl;
 
 	// print out the adjacency matrix
-	cout << endl << "--------------" << endl;
+	cout << endl << "The adjacency matrix is" << endl;
 	for (i = 0; i < numNodes; ++i) {
 		for (j = 0; j < numNodes; ++j) {
 			cout << AM[i][j] << " ";
@@ -166,36 +117,3 @@ int main()
 
     return 0;
 }
-
-
-/*
-for (int i=0; i<numNodes; ++i) {
-
-        int nodeVal = apr[i][0];
-        int nodeNext = apr[i][1];
-
-        // if the first node contains a -1 for it's nodeNext value, it's isolated
-        cout << "| " <<  nodeVal << " | " << nodeNext << " |";
-
-        if ( nodeNext != -1 ) cout << "-->";
-
-        if ( nodeNext != -1 ) {
-
-            do {
-
-                nodeVal = apr[nodeNext-1][0];
-                nodeNext = apr[nodeNext-1][1];
-
-                cout << "| " <<  nodeVal << " | " << nodeNext << " |";
-                if ( nodeNext != -1 ) cout << "-->";
-
-
-            } while ( nodeNext != -1 );
-
-        }
-
-        cout << endl;
-        cout << endl;
-    }
-
-*/
