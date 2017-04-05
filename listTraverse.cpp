@@ -51,12 +51,12 @@ void traverseArray(int apr[][COLS], int numNodes) {
 
         // if the first node contains a -1 for it's nodeNext value, it's isolated
         cout << "| " <<  nodeVal << " | " << nodeNext << " |";
+
         if ( nodeNext != -1 ) cout << "-->";
 
         if ( nodeNext != -1 ) {
 
             do {
-
 
                 nodeVal = apr[nodeNext-1][0];
                 nodeNext = apr[nodeNext-1][1];

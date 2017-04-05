@@ -21,7 +21,7 @@ int main()
 	int isolatedNodesArray[MAX_ROWS] = { 0 };
 	int numIsolatedNodes = 0;
 	int i, j;
-	int nodeValue, nextNode = 0;
+	int nodeVal, nextNode = 0;
 	
 	// get the number of nodes from the user
 	cout << endl;
@@ -73,7 +73,37 @@ int main()
 	}
 	*/
 
+	for (int i=0; i<numNodes; ++i) {
 
+			int nodeVal = A[i][0];
+			int nodeNext = A[i][1];
+
+			// if the first node contains a -1 for it's nodeNext value, it's isolated
+			if (nodeNext == -1) {
+				isolatedNodesArray[numIsolatedNodes] = A[i][0];
+				++numIsolatedNodes;
+			};
+
+			// if the node is not isolated, we need to follow it's adjacency path
+			if ( nodeNext != -1 ) {
+
+				do {
+
+					nodeVal = A[nodeNext-1][0];
+					nodeNext = A[nodeNext-1][1];
+
+					// assign a 1 to the proper column in the row of the adjacency matrix
+					// subtract one to counter for the mathematician entering the values
+					// so it's an array index
+					AM[i][nodeVal - 1] = 1;
+
+				} while ( nodeNext != -1 );
+
+			}
+
+		}
+
+	/*
 	// build an adjacency matrix based on the array-pointer representation
 	for (i = 0; i < numNodes; ++i) {
 		
@@ -110,8 +140,10 @@ int main()
 		}
 
 	}
+	*/
 
 	// check if there's more than one node, the language pluralizes
+	// is that a word? pluralizes? a language major, i am not.
 	if (numIsolatedNodes > 1) {
 		cout << "nodes ";
 		for (i = 0; i < numIsolatedNodes - 1; ++i) {
@@ -135,3 +167,35 @@ int main()
     return 0;
 }
 
+
+/*
+for (int i=0; i<numNodes; ++i) {
+
+        int nodeVal = apr[i][0];
+        int nodeNext = apr[i][1];
+
+        // if the first node contains a -1 for it's nodeNext value, it's isolated
+        cout << "| " <<  nodeVal << " | " << nodeNext << " |";
+
+        if ( nodeNext != -1 ) cout << "-->";
+
+        if ( nodeNext != -1 ) {
+
+            do {
+
+                nodeVal = apr[nodeNext-1][0];
+                nodeNext = apr[nodeNext-1][1];
+
+                cout << "| " <<  nodeVal << " | " << nodeNext << " |";
+                if ( nodeNext != -1 ) cout << "-->";
+
+
+            } while ( nodeNext != -1 );
+
+        }
+
+        cout << endl;
+        cout << endl;
+    }
+
+*/
